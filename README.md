@@ -10,7 +10,7 @@ required — with every "AI" feature backed by real, deterministic logic running
 seeded, internally-consistent demo school (not placeholder UI or fake buttons).
 
 ---
-# Vercel App (Deployment Link)
+# Vercel App (Live demo Link)
 
 [School Sync – Live Demo](https://school-sync-26z8k7c2h-sandhya13rs-projects.vercel.app)
 
