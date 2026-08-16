@@ -193,5 +193,117 @@ underlying data:
 - 3 sample pending documents, 3 sample complaints
 
 ## File structure
+```
+schoolsync-ai/
+├── index.html Vite entry HTML
+├── package.json Dependencies + npm scripts
+├── vite.config.js Vite/React plugin config
+├── .gitignore
+├── README.md This file
+└── src/
+├── main.jsx Mounts <App /> into #root
+└── App.jsx The application (identical content to SchoolSyncAI.jsx)
+```
+### Internal layout of `App.jsx` / `SchoolSyncAI.jsx`
+The whole app is one file, organized top-to-bottom into clearly marked sections:
 
-### As a Claude.ai artifact
+| Section                      | Contents                                                              |
+|-------------------------------|--------------------------------------------------------------------|
+| `window.storage` polyfill     | localStorage-backed fallback so persistence works outside Claude.ai |
+| **Design tokens**             | The `CSS` string — light/dark CSS variables, layout, component styles |
+| **Seed data**                 | Days/periods/subjects/classes, `buildTeachers()`, `buildStudents()`, `generateTimetable()`, `detectConflicts()`, `resolveConflict()`, `recommendSubstitute()`, document templates, question bank, complaint seed + `triage()` |
+| **App context**                | React Context (`Ctx`/`useApp`), `buildInitialState()`, `DEMO_USERS` |
+| **Small primitives**           | `Badge`, `StatCard`, `Avatar`, `EmptyState`, `ConfBar`, `ThemeToggle` |
+| **Shell**                      | `Sidebar`, `Topbar` (role-aware nav config in `NAV`) |
+| **Login**                      | Sign-in screen with the demo-account autocomplete dropdown |
+| **Root / ShellRoot**            | Top-level state, persistence effects, theme handling, routing |
+| **Admin Dashboard**             | `buildAlerts()`, `atRiskStudents()`, `AdminDashboard` |
+| **Students / Teachers**         | Directory + detail views |
+| **Attendance & Marks**          | `AttendancePage` |
+| **Timetable**                   | `TimetablePage` |
+| **Substitutes**                 | `SubstitutesPage` |
+| **Documents**                   | `DocumentsPage` (AI Document Reader) |
+| **Analytics**                   | `AnalyticsPage` |
+| **Complaints**                  | `ComplaintsPage` |
+| **Question Paper Generator**     | `QuestionPaperPage` |
+| **AI Assistant**                 | `answerQuestion()`, `AssistantPage` |
+| **Teacher / Family views**       | `TeacherDashboard`, `FamilyDashboard`, `FamilyMarks` |
+
+## Tech stack
+
+- **React 18** (function components + hooks, no external state library — plain
+  `useState`/`useContext`)
+- **Vite** for local dev/build tooling
+- **Recharts** for the bar/line charts
+- **lucide-react** for icons
+- Hand-written CSS (CSS custom properties for theming) — no Tailwind/UI kit dependency
+- `window.storage` (Claude.ai artifact API) with a `localStorage` polyfill for standalone use
+
+No backend, no database, no build-time environment variables required.
+
+## Run it locally
+
+Requires [Node.js](https://nodejs.org) 18+.
+
+```bash
+npm install
+npm run dev
+```
+
+Then open the URL it prints (usually `http://localhost:5173`).
+
+## Build for production
+
+```bash
+npm run build
+npm run preview   # optional: preview the production build locally
+```
+
+The build output goes to `dist/`.
+
+## Push this project to GitHub
+
+From inside this project folder:
+
+```bash
+git init
+git add .
+git commit -m "Initial commit — SchoolSync AI"
+git branch -M main
+git remote add origin https://github.com/<your-username>/<your-repo>.git
+git push -u origin main
+```
+
+## Scope & roadmap alignment
+
+This build implements the **"Round 2 — Must Build + Strong Differentiators"** feature set:
+
+- ✅ AI Document Reader
+- ✅ Smart Timetable + Conflict Solver
+- ✅ Student & Teacher Management
+- ✅ Attendance & Marks
+- ✅ Proactive Admin Dashboard
+- ✅ Role-based login (Admin / Teacher / Student / Parent)
+- ✅ AI Admin Assistant (natural-language queries)
+- ✅ AI Performance Analytics
+- ✅ AI Question Paper Generator
+- ✅ Substitute Teacher Recommender
+
+Deliberately **out of scope** (matching the roadmap's own "Priority 3 / Bonus & Future"
+list): Library, Transport, Inventory, Maintenance, full Fees module, Audit Logs, Global
+Search, multi-school SaaS, computer-vision attendance, and CCTV safety analytics.
+
+## Known limitations
+
+- No real backend or database — all state lives in the browser (see
+  [Data persistence](#data-persistence)).
+- No external AI provider is wired up; document extraction, the assistant, and question
+  generation run on local deterministic logic rather than a live model call (this is
+  intentional and clearly labeled in the UI as "Demo AI mode" — see
+  [How the "AI" actually works](#how-the-ai-actually-works)).
+- The dataset is a scaled-down demo school (120 students, 15 teachers) rather than a
+  full-size roster, chosen so every number in the dashboard stays internally consistent
+  and easy to verify.
+- A handful of timetable slots per class may be left unfilled by the generator (read as
+  free periods) when workload caps are tight — this doesn't affect conflict detection or
+  the substitute recommender.
