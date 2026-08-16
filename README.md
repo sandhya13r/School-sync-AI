@@ -12,7 +12,7 @@ seeded, internally-consistent demo school (not placeholder UI or fake buttons).
 ---
 # Vercel App (Deployment Link)
 
-school-sync-26z8k7c2h-sandhya13rs-projects.vercel.app
+[school-sync-26z8k7c2h-sandhya13rs-projects.vercel.app](#school-sync-26z8k7c2h-sandhya13rs-projects.vercel.app)
 
 
 ## Table of contents
