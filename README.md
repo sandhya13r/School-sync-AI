@@ -38,34 +38,6 @@ npm run preview   # optional: preview the production build locally
 
 The build output goes to `dist/`.
 
-## Push this project to GitHub
-
-From inside this project folder:
-
-```bash
-git init
-git add .
-git commit -m "Initial commit — SchoolSync AI"
-git branch -M main
-git remote add origin https://github.com/<your-username>/<your-repo>.git
-git push -u origin main
-```
-
-(Create the empty repo on GitHub first — github.com → New repository — without a README,
-so it doesn't conflict with this one.)
-
-## Deploy it (optional)
-
-**GitHub Pages**
-1. In `vite.config.js`, set `base: "/<your-repo-name>/"`.
-2. `npm install -D gh-pages`
-3. Add to `package.json` scripts: `"deploy": "vite build && gh-pages -d dist"`
-4. `npm run deploy`, then enable Pages in the repo settings (source: `gh-pages` branch).
-
-**Vercel / Netlify**
-Just import the GitHub repo — both auto-detect Vite. Build command: `npm run build`,
-output directory: `dist`.
-
 ## Notes on data persistence
 
 This app was originally built as a Claude.ai artifact, which provides a `window.storage`
